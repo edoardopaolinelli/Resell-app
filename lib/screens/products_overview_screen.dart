@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../screens/cart_screen.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
@@ -22,7 +23,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductsOverviewScreen'),
+        title: Text(
+          'ProductsOverviewScreen',
+          style: TextStyle(
+              color: Theme.of(context).primaryTextTheme.titleMedium!.color),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           PopupMenuButton(
@@ -58,7 +63,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ),
             child: IconButton(
               onPressed: () {
-                //
+                Navigator.of(context).pushNamed(CartScreen.routeName);
               },
               icon: Icon(
                 Icons.shopping_cart,
