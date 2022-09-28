@@ -13,12 +13,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: ProductsProvider(),
+    return ChangeNotifierProvider(
+      create: (context) => ProductsProvider(),
       child: MaterialApp(
         title: 'ResellApp',
         theme: ThemeData(
-          colorSchemeSeed: Colors.amber,
+          colorSchemeSeed: Colors.green,
           brightness: Brightness.light,
           useMaterial3: true,
           fontFamily: 'Lato',

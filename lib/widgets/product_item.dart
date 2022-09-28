@@ -19,7 +19,10 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(
+      context,
+      listen: false,
+    );
     return GridTile(
       footer: GridTileBar(
         leading: IconButton(
@@ -27,14 +30,16 @@ class ProductItem extends StatelessWidget {
           icon: const Icon(Icons.shopping_bag),
           color: Colors.deepOrange,
         ),
-        trailing: IconButton(
-          onPressed: () {
-            product.toggleFavoriteStatus();
-          },
-          icon: Icon(product.isFavorite
-              ? Icons.favorite
-              : Icons.favorite_outline_sharp),
-          color: Colors.deepOrange,
+        trailing: Consumer<Product>(
+          builder: (context, productValue, child) => IconButton(
+            onPressed: () {
+              productValue.toggleFavoriteStatus();
+            },
+            icon: Icon(product.isFavorite
+                ? Icons.favorite
+                : Icons.favorite_outline_sharp),
+            color: Colors.deepOrange,
+          ),
         ),
         backgroundColor: Colors.black45,
         title: Text(
