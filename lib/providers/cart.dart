@@ -9,10 +9,6 @@ class Cart with ChangeNotifier {
     return {..._objects};
   }
 
-  /*  int get ojectsCount {
-    return _objects.length;
-  } */
-
   double get totalAmount {
     double total = 0.0;
     _objects.forEach((key, cartObject) {
@@ -21,7 +17,7 @@ class Cart with ChangeNotifier {
     return total;
   }
 
-  void addItem(String productId, double price, String title) {
+  void addObject(String productId, double price, String title) {
     if (_objects.containsKey(productId)) {
       _objects.update(
         productId,
@@ -43,6 +39,11 @@ class Cart with ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
+  }
+
+  void removeObject(String productId) {
+    _objects.remove(productId);
     notifyListeners();
   }
 }

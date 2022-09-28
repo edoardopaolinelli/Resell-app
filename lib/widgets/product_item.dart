@@ -21,7 +21,7 @@ class ProductItem extends StatelessWidget {
       footer: GridTileBar(
         leading: IconButton(
           onPressed: () {
-            cart.addItem(product.id, product.price, product.title);
+            cart.addObject(product.id, product.price, product.title);
           },
           icon: const Icon(Icons.shopping_bag),
           color: Colors.amber,

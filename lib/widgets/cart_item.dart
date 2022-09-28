@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/cart.dart';
 
 class CartItem extends StatelessWidget {
   final String id;
+  final String productId;
   final String title;
   final double price;
   final int quantity;
@@ -12,38 +15,63 @@ class CartItem extends StatelessWidget {
     required this.title,
     required this.price,
     required this.quantity,
+    required this.productId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 4,
+    return Dismissible(
+      key: ValueKey(id),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        Provider.of<Cart>(
+          context,
+          listen: false,
+        ).removeObject(productId);
+      },
+      background: Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+        color: Theme.of(context).colorScheme.error,
+        padding: const EdgeInsets.only(right: 10),
+        alignment: Alignment.centerRight,
+        child: const Icon(
+          Icons.delete,
+          size: 35,
+          color: Colors.white,
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: FittedBox(
-                child: Text(
-                  '$price €',
-                  style: TextStyle(
-                      color: Theme.of(context)
-                          .primaryTextTheme
-                          .titleMedium!
-                          .color),
+      child: Card(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 25,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: FittedBox(
+                  child: Text(
+                    '$price €',
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .primaryTextTheme
+                            .titleMedium!
+                            .color),
+                  ),
                 ),
               ),
             ),
+            title: Text(title),
+            subtitle: Text('Total: ${price * quantity} €'),
+            trailing: Text('$quantity x'),
           ),
-          title: Text(title),
-          subtitle: Text('Total: ${price * quantity} €'),
-          trailing: Text('$quantity x'),
         ),
       ),
     );
