@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
 
-import '../models/cart_item.dart';
+import '../models/cart_object.dart';
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items = {};
+  Map<String, CartObject> _objects = {};
 
-  Map<String, CartItem> get items {
-    return {..._items};
+  Map<String, CartObject> get objects {
+    return {..._objects};
   }
 
-  int get itemCount {
-    return _items.length;
-  }
+  /*  int get ojectsCount {
+    return _objects.length;
+  } */
 
   double get totalAmount {
     double total = 0.0;
-    _items.forEach((key, cartItem) {
-      total += cartItem.quantity * cartItem.price;
+    _objects.forEach((key, cartObject) {
+      total += cartObject.quantity * cartObject.price;
     });
     return total;
   }
 
   void addItem(String productId, double price, String title) {
-    if (_items.containsKey(productId)) {
-      _items.update(
+    if (_objects.containsKey(productId)) {
+      _objects.update(
         productId,
-        (cartItem) => CartItem(
-          id: cartItem.id,
-          title: cartItem.title,
-          quantity: cartItem.quantity + 1,
-          price: cartItem.price,
+        (cartObject) => CartObject(
+          id: cartObject.id,
+          title: cartObject.title,
+          quantity: cartObject.quantity + 1,
+          price: cartObject.price,
         ),
       );
     } else {
-      _items.putIfAbsent(
+      _objects.putIfAbsent(
         productId,
-        () => CartItem(
+        () => CartObject(
           id: DateTime.now().toString(),
           title: title,
           quantity: 1,
