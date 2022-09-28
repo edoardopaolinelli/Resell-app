@@ -16,18 +16,61 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productId);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${chosenProduct.title} Details'),
-      ),
-      body: Column(
-        children: [
-          Image.network(
-            chosenProduct.imageUrl,
-            fit: BoxFit.cover,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).primaryTextTheme.titleMedium!.color,
           ),
-          Text(chosenProduct.title),
-          Text(chosenProduct.price.toString()),
-          Text(chosenProduct.description),
-        ],
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          chosenProduct.title,
+          style: TextStyle(
+            color: Theme.of(context).primaryTextTheme.titleMedium!.color,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: Image.network(
+                chosenProduct.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              '${chosenProduct.price} €',
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                chosenProduct.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
