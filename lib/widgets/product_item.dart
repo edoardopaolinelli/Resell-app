@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/cart.dart';
 import '../providers/product.dart';
 import '../screens/product_detail_screen.dart';
 
@@ -12,12 +13,18 @@ class ProductItem extends StatelessWidget {
       context,
       listen: false,
     );
+    final cart = Provider.of<Cart>(
+      context,
+      listen: false,
+    );
     return GridTile(
       footer: GridTileBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            cart.addItem(product.id, product.price, product.title);
+          },
           icon: const Icon(Icons.shopping_bag),
-          color: Colors.deepOrange,
+          color: Colors.amber,
         ),
         trailing: Consumer<Product>(
           builder: (context, productValue, child) => IconButton(
@@ -27,7 +34,7 @@ class ProductItem extends StatelessWidget {
             icon: Icon(product.isFavorite
                 ? Icons.favorite
                 : Icons.favorite_outline_sharp),
-            color: Colors.deepOrange,
+            color: Colors.amber,
           ),
         ),
         backgroundColor: Colors.black45,
