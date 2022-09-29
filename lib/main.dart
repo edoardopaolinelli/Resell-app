@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resell_app/screens/orders_screen.dart';
+import './providers/orders.dart';
 import './screens/cart_screen.dart';
 import './providers/cart.dart';
 import './screens/products_overview_screen.dart';
@@ -23,13 +25,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Cart(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => Orders(),
+        ),
       ],
       child: MaterialApp(
         title: 'ResellApp',
         theme: ThemeData(
-          colorSchemeSeed: Colors.green,
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+            size: 30,
+          ),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.green,
+          ).copyWith(secondary: Colors.orange),
           brightness: Brightness.light,
-          useMaterial3: true,
           fontFamily: 'Lato',
         ),
         home: const ProductsOverviewScreen(),
@@ -37,6 +47,7 @@ class MyApp extends StatelessWidget {
           ProductDetailScreen.routeName: (context) =>
               const ProductDetailScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
+          OrdersScreen.routeName: (context) => const OrdersScreen(),
         },
       ),
     );

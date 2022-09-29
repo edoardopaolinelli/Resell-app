@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
 import '../widgets/cart_item.dart';
+import '../providers/orders.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -13,18 +14,15 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
-            color: Theme.of(context).primaryTextTheme.titleMedium!.color,
           ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
+        title: const Text(
           'Your Cart',
-          style: TextStyle(
-              color: Theme.of(context).primaryTextTheme.titleMedium!.color),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
@@ -47,7 +45,7 @@ class CartScreen extends StatelessWidget {
                     const Spacer(),
                     Chip(
                       label: Text(
-                        '${cart.totalAmount} €',
+                        '${cart.totalAmount.toStringAsFixed(2)} €',
                         style: TextStyle(
                           color: Theme.of(context)
                               .primaryTextTheme
@@ -59,7 +57,11 @@ class CartScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        //
+                        Provider.of<Orders>(context, listen: false).addOrder(
+                          cart.objects.values.toList(),
+                          cart.totalAmount,
+                        );
+                        cart.clearCart();
                       },
                       child: Text(
                         'ORDER NOW',

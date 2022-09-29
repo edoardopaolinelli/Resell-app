@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/app_drawer.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
@@ -23,10 +24,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'ProductsOverviewScreen',
-          style: TextStyle(
-              color: Theme.of(context).primaryTextTheme.titleMedium!.color),
+        title: const Text(
+          'ProductsScreen',
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
@@ -40,9 +39,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 }
               });
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.more_vert,
-              color: Theme.of(context).colorScheme.onSecondary,
             ),
             itemBuilder: (context) => [
               const PopupMenuItem(
@@ -58,21 +56,21 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           Consumer<Cart>(
             builder: (context, cart, ch) => Badge(
               value: cart.objects.length.toString(),
-              color: Colors.amber,
+              color: Colors.red,
               child: ch as Widget,
             ),
             child: IconButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(CartScreen.routeName);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.shopping_cart,
-                color: Theme.of(context).colorScheme.onSecondary,
               ),
             ),
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: ProductsGrid(showFavorites: _showFavoritesOnly),
     );
   }

@@ -17,9 +17,8 @@ class ProductDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
-            color: Theme.of(context).primaryTextTheme.titleMedium!.color,
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -27,8 +26,7 @@ class ProductDetailScreen extends StatelessWidget {
         ),
         title: Text(
           chosenProduct.title,
-          style: TextStyle(
-            color: Theme.of(context).primaryTextTheme.titleMedium!.color,
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
