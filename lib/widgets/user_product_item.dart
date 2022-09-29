@@ -12,7 +12,6 @@ class UserProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      //color: Colors.lime,
       elevation: 5,
       child: ListTile(
         title: Text(title),
