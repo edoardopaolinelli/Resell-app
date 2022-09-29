@@ -30,6 +30,7 @@ class CartScreen extends StatelessWidget {
         builder: (context, cart, child) => Column(
           children: [
             Card(
+              elevation: 10,
               margin: const EdgeInsets.all(15),
               child: Padding(
                 padding: const EdgeInsets.all(8),

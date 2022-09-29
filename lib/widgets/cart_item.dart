@@ -68,6 +68,7 @@ class CartItem extends StatelessWidget {
         ),
       ),
       child: Card(
+        elevation: 5,
         margin: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 4,
