@@ -84,7 +84,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -101,14 +101,31 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(_editedProduct)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
+      try {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog<Null>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('An error occurred!'),
+                content: const Text('Something went wrong!'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Okay'),
+                  ),
+                ],
+              );
+            });
+      }
+      setState(() {
+        _isLoading = false;
       });
+      Navigator.of(context).pop();
     }
   }
 

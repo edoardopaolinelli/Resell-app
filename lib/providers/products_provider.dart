@@ -51,28 +51,42 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future<void> addProduct(Product product) {
+  Future<void> fetchAndSetProducts() async {
     final url = Uri.parse(
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products.json');
-    return http
-        .post(url,
-            body: jsonEncode({
-              'title': product.title,
-              'description': product.description,
-              'imageUrl': product.imageUrl,
-              'price': product.price,
-              'isFavorite': product.isFavorite,
-            }))
-        .then((response) {
+    try {
+      final response = await http.get(url);
+      print(json.decode(response.body));
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<void> addProduct(Product product) async {
+    final url = Uri.parse(
+        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products.json');
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
       final newProduct = Product(
-          id: jsonDecode(response.body)['name'],
+          id: json.decode(response.body)['name'],
           title: product.title,
           description: product.description,
           price: product.price,
           imageUrl: product.imageUrl);
       _items.add(newProduct);
       notifyListeners();
-    });
+    } catch (error) {
+      throw (error);
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
