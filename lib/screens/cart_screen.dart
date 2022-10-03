@@ -114,11 +114,10 @@ class _OrderButtonState extends State<OrderButton> {
             },
       child: _isLoading
           ? const CircularProgressIndicator()
-          : Text(
+          : const Text(
               'ORDER NOW',
               style: TextStyle(
                 fontSize: 14,
-                //color: Theme.of(context).colorScheme.primary,
               ),
             ),
     );

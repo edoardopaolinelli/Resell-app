@@ -57,7 +57,10 @@ class ProductsProvider with ChangeNotifier {
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products.json');
     try {
       final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
+      if (extractedData == null) {
+        return;
+      }
       final List<Product> loadedProducts = [];
       extractedData.forEach((productId, productData) {
         loadedProducts.add(Product(
