@@ -16,6 +16,8 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     return Card(
       elevation: 5,
       child: ListTile(
@@ -46,16 +48,27 @@ class UserProductItem extends StatelessWidget {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop(false);
+                            navigator.pop(false);
                           },
                           child: const Text('Cancel'),
                         ),
                         TextButton(
-                          onPressed: () {
-                            Provider.of<ProductsProvider>(context,
-                                    listen: false)
-                                .deleteProduct(id as String);
-                            Navigator.of(context).pop(true);
+                          onPressed: () async {
+                            try {
+                              await Provider.of<ProductsProvider>(context,
+                                      listen: false)
+                                  .deleteProduct(id as String);
+                            } catch (error) {
+                              scaffoldMessenger.showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Deleting failed!',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              );
+                            }
+                            navigator.pop(true);
                           },
                           child: const Text('Continue'),
                         ),
