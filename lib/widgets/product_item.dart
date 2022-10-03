@@ -49,7 +49,7 @@ class ProductItem extends StatelessWidget {
         ),
         trailing: Consumer<Product>(
           builder: (context, productValue, child) => IconButton(
-            onPressed: () {
+            onPressed: () async {
               productValue.toggleFavoriteStatus();
             },
             icon: Icon(product.isFavorite

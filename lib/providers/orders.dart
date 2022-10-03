@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:resell_app/models/cart_object.dart';
+import 'package:http/http.dart' as http;
+import '../models/cart_object.dart';
 
 class OrderObject {
   final String id;
@@ -22,15 +24,35 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  void addOrder(List<CartObject> cartProducts, double total) {
-    _orders.add(
-      OrderObject(
-        id: DateTime.now().toString(),
-        amount: total,
-        products: cartProducts,
-        dateTime: DateTime.now(),
-      ),
-    );
-    notifyListeners();
+  Future<void> addOrder(List<CartObject> cartProducts, double total) async {
+    final timeStamp = DateTime.now();
+    final url = Uri.parse(
+        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders.json');
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'amount': total,
+            'dateTime': timeStamp.toIso8601String(),
+            'products': cartProducts
+                .map((cartProduct) => {
+                      'id': cartProduct.id,
+                      'title': cartProduct.title,
+                      'quantity': cartProduct.quantity,
+                      'price': cartProduct.price,
+                    })
+                .toList(),
+          }));
+      _orders.add(
+        OrderObject(
+          id: json.decode(response.body)['name'],
+          amount: total,
+          products: cartProducts,
+          dateTime: DateTime.now(),
+        ),
+      );
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
   }
 }
