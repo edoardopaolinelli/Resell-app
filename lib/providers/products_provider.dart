@@ -74,7 +74,7 @@ class ProductsProvider with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      throw (error);
+      rethrow;
     }
   }
 
@@ -101,7 +101,7 @@ class ProductsProvider with ChangeNotifier {
       _items.add(newProduct);
       notifyListeners();
     } catch (error) {
-      throw (error);
+      rethrow;
     }
   }
 
@@ -121,7 +121,7 @@ class ProductsProvider with ChangeNotifier {
         _items[productIndex] = newProduct;
         notifyListeners();
       } catch (error) {
-        throw (error);
+        rethrow;
       }
     }
   }
