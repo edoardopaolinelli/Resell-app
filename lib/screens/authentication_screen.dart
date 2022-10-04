@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/authentication.dart';
 
 enum AuthenticationMode { signup, login }
 
@@ -27,7 +29,7 @@ class AuthenticationScreen extends StatelessWidget {
             ),
           ),
           SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: deviceSize.height,
               width: deviceSize.width,
               child: Column(
@@ -94,9 +96,8 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
   bool _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
-      // Invalid!
       return;
     }
     _formKey.currentState!.save();
@@ -104,9 +105,12 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
       _isLoading = true;
     });
     if (_authenticationMode == AuthenticationMode.login) {
-      // Log user in
+      // LogIn
     } else {
-      // Sign user up
+      await Provider.of<Authentication>(context, listen: false).signup(
+        _authenticationData['email']!,
+        _authenticationData['password']!,
+      );
     }
     setState(() {
       _isLoading = false;
