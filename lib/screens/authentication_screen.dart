@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
 import '../providers/authentication.dart';
 
-enum AuthenticationMode { signup, login }
+enum AuthenticationMode {
+  signup,
+  login,
+}
 
 class AuthenticationScreen extends StatelessWidget {
   static const routeName = '/authentication';
@@ -232,6 +235,7 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                             if (value != _passwordController.text) {
                               return 'Passwords do not match!';
                             }
+                            //return null;
                           }
                         : null,
                   ),

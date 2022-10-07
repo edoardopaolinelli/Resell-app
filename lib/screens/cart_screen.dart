@@ -93,7 +93,8 @@ class OrderButton extends StatefulWidget {
 }
 
 class _OrderButtonState extends State<OrderButton> {
-  var _isLoading = false;
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(

@@ -31,16 +31,17 @@ class ProductsProvider with ChangeNotifier {
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authenticationToken$filterString');
     try {
       final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
-      if (extractedData == null) {
+      final databaseData = json.decode(response.body) as Map<String, dynamic>?;
+      if (databaseData == null) {
         return;
       }
       final favoriteUrl = Uri.parse(
           'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/$userId.json?auth=$authenticationToken');
       final favoriteResponse = await http.get(favoriteUrl);
-      final favoriteData = json.decode(favoriteResponse.body);
+      final favoriteData =
+          json.decode(favoriteResponse.body) as Map<String, dynamic>?;
       final List<Product> loadedProducts = [];
-      extractedData.forEach((productId, productData) {
+      databaseData.forEach((productId, productData) {
         loadedProducts.add(
           Product(
             id: productId,
@@ -56,7 +57,7 @@ class ProductsProvider with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      rethrow;
+      throw error;
     }
   }
 
@@ -75,36 +76,35 @@ class ProductsProvider with ChangeNotifier {
         }),
       );
       final newProduct = Product(
-          id: json.decode(response.body)['name'],
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl);
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
       _items.add(newProduct);
       notifyListeners();
     } catch (error) {
-      rethrow;
+      throw error;
     }
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
     final productIndex = _items.indexWhere((product) => product.id == id);
-    if (productIndex >= 0) {
-      final url = Uri.parse(
-          'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$authenticationToken');
-      try {
-        await http.patch(url,
-            body: json.encode({
-              'title': newProduct.title,
-              'description': newProduct.description,
-              'price': newProduct.price,
-              'imageUrl': newProduct.imageUrl,
-            }));
-        _items[productIndex] = newProduct;
-        notifyListeners();
-      } catch (error) {
-        rethrow;
-      }
+    final url = Uri.parse(
+        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$authenticationToken');
+    try {
+      await http.patch(url,
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl,
+          }));
+      _items[productIndex] = newProduct;
+      notifyListeners();
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -116,7 +116,7 @@ class ProductsProvider with ChangeNotifier {
     _items.removeAt(productIndex);
     notifyListeners();
     final response = await http.delete(url);
-    if (response.statusCode >= 400) {
+    if (response.statusCode > 399 && response.statusCode < 500) {
       _items.insert(productIndex, existingProduct);
       notifyListeners();
       throw HttpException('Could not delete the product.');

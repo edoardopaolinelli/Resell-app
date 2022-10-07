@@ -32,7 +32,7 @@ class Product with ChangeNotifier {
           isFavorite,
         ),
       );
-      if (response.statusCode >= 400) {
+      if (response.statusCode > 399 && response.statusCode < 500) {
         isFavorite = oldStatus;
         notifyListeners();
       }

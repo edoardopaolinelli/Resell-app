@@ -33,22 +33,24 @@ class Orders with ChangeNotifier {
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authenticationToken');
     try {
       final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
-      if (extractedData == null) {
+      final databaseData = json.decode(response.body) as Map<String, dynamic>?;
+      if (databaseData == null) {
         return;
       }
       final List<OrderObject> loadedOrders = [];
-      extractedData.forEach((orderId, orderData) {
+      databaseData.forEach((orderId, orderData) {
         loadedOrders.add(OrderObject(
           id: orderId,
           amount: orderData['amount'],
           products: (orderData['products'] as List<dynamic>)
-              .map((cartObject) => CartObject(
-                    id: cartObject['id'],
-                    title: cartObject['title'],
-                    quantity: cartObject['quantity'],
-                    price: cartObject['price'],
-                  ))
+              .map(
+                (cartObject) => CartObject(
+                  id: cartObject['id'],
+                  title: cartObject['title'],
+                  quantity: cartObject['quantity'],
+                  price: cartObject['price'],
+                ),
+              )
               .toList(),
           dateTime: DateTime.parse(orderData['dateTime']),
         ));

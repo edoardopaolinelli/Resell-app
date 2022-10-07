@@ -63,10 +63,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   void dispose() {
+    _imageUrlFocusNode.removeListener(_updateImageUrl);
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
     _imageUrlController.dispose();
-    _imageUrlFocusNode.removeListener(_updateImageUrl);
     _imageUrlFocusNode.dispose();
     super.dispose();
   }
@@ -200,7 +200,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             id: _editedProduct.id,
                             title: _editedProduct.title,
                             description: _editedProduct.description,
-                            price: double.parse(newValue!),
+                            price: double.parse(newValue as String),
                             imageUrl: _editedProduct.imageUrl,
                             isFavorite: _editedProduct.isFavorite,
                           );
