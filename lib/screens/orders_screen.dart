@@ -27,45 +27,37 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Text(
-            'Your Orders',
-          ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: const Text(
+          'Your Orders',
         ),
-        drawer: const AppDrawer(),
-        body: FutureBuilder(
-          future: _ordersFuture,
-          builder: ((context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+      ),
+      drawer: const AppDrawer(),
+      body: FutureBuilder(
+        future: _ordersFuture,
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (snapshot.error != null) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Text('An error occurred'),
               );
             } else {
-              if (snapshot.error != null) {
-                return const Center(
-                  child: Text('An error occurred'),
-                );
-              } else {
-                return Consumer<Orders>(
-                  builder: (context, ordersData, child) => ListView.builder(
-                    itemCount: ordersData.orders.length,
-                    itemBuilder: (context, index) =>
-                        OrderItem(order: ordersData.orders[index]),
-                  ),
-                );
-              }
+              return Consumer<Orders>(
+                builder: (context, ordersData, child) => ListView.builder(
+                  itemCount: ordersData.orders.length,
+                  itemBuilder: (context, index) =>
+                      OrderItem(order: ordersData.orders[index]),
+                ),
+              );
             }
-          }),
-        )
-
-        /* _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: ordersData.orders.length,
-              itemBuilder: (context, index) =>
-                  OrderItem(order: ordersData.orders[index]),
-            ), */
-        );
+          }
+        }),
+      ),
+    );
   }
 }

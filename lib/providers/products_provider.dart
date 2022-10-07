@@ -7,8 +7,8 @@ import './product.dart';
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [];
 
-  final String authenticationToken;
-  final String userId;
+  final String? authenticationToken;
+  final String? userId;
 
   ProductsProvider(this.authenticationToken, this.userId, this._items);
 

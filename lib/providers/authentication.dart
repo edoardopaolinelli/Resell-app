@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/http_exception.dart';
 import '../auth/secrets.dart';
 
@@ -8,6 +10,7 @@ class Authentication with ChangeNotifier {
   String? _token;
   DateTime? _expirationDate;
   String? _userId;
+  Timer? _authenticationTimer;
 
   bool get isAuthenticated {
     return token != null;
@@ -54,7 +57,15 @@ class Authentication with ChangeNotifier {
           seconds: int.parse(responseData['expiresIn']),
         ),
       );
+      _autoLogout();
       notifyListeners();
+      final preferences = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expirationDate': _expirationDate!.toIso8601String(),
+      });
+      preferences.setString('userData', userData);
     } catch (error) {
       throw error;
     }
@@ -85,9 +96,62 @@ class Authentication with ChangeNotifier {
           seconds: int.parse(responseData['expiresIn']),
         ),
       );
+      _autoLogout();
       notifyListeners();
+      final preferences = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expirationDate': _expirationDate!.toIso8601String(),
+      });
+      preferences.setString('userData', userData);
     } catch (error) {
       throw error;
     }
+  }
+
+  Future<bool> automaticLogin() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (!preferences.containsKey('userData')) {
+      return false;
+    }
+    final extractedUserData =
+        json.decode(preferences.getString('userData') as String)
+            as Map<String, dynamic>;
+    final expirationDate = DateTime.parse(extractedUserData['expirationDate']);
+    if (expirationDate.isBefore(DateTime.now())) {
+      return false;
+    }
+    _token = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expirationDate = expirationDate;
+    notifyListeners();
+    _autoLogout();
+    return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _userId = null;
+    _expirationDate = null;
+    if (_authenticationTimer != null) {
+      _authenticationTimer!.cancel();
+      _authenticationTimer = null;
+    }
+    notifyListeners();
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
+
+  void _autoLogout() {
+    if (_authenticationTimer != null) {
+      _authenticationTimer!.cancel();
+    }
+    final remainingTime = _expirationDate!.difference(DateTime.now()).inSeconds;
+    _authenticationTimer = Timer(
+        Duration(
+          seconds: remainingTime,
+        ),
+        logout);
   }
 }

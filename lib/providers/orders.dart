@@ -19,8 +19,8 @@ class OrderObject {
 
 class Orders with ChangeNotifier {
   List<OrderObject> _orders = [];
-  final String authenticationToken;
-  final String userId;
+  final String? authenticationToken;
+  final String? userId;
 
   Orders(this.authenticationToken, this.userId, this._orders);
 

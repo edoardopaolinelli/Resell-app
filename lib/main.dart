@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Authentication, ProductsProvider>(
           update: (context, authentication, previous) => ProductsProvider(
-            authentication.token as String,
-            authentication.userId as String,
+            authentication.token,
+            authentication.userId,
             previous == null ? [] : previous.items,
           ),
           create: (context) => ProductsProvider('', '', []),
@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Authentication, Orders>(
           update: (context, authentication, previous) => Orders(
-              authentication.token as String,
-              authentication.userId as String,
+              authentication.token,
+              authentication.userId,
               previous == null ? [] : previous.orders),
           create: (context) => Orders('', '', []),
         ),
@@ -61,7 +61,15 @@ class MyApp extends StatelessWidget {
           ),
           home: authenticationData.isAuthenticated
               ? const ProductsOverviewScreen()
-              : const AuthenticationScreen(),
+              : FutureBuilder(
+                  future: authenticationData.automaticLogin(),
+                  builder: (context, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const Scaffold(
+                              body: Center(child: Text('Loading...')),
+                            )
+                          : const AuthenticationScreen(),
+                ),
           routes: {
             ProductDetailScreen.routeName: (context) =>
                 const ProductDetailScreen(),
