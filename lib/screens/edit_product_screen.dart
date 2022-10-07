@@ -18,7 +18,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   var _editedProduct = Product(
-    id: null,
+    id: '',
     title: '',
     description: '',
     price: 0,
@@ -42,8 +42,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments as String?;
-      if (productId != null) {
+      final productId = ModalRoute.of(context)!.settings.arguments.toString();
+      if (productId != '') {
         _editedProduct = Provider.of<ProductsProvider>(
           context,
           listen: false,
@@ -92,7 +92,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (_editedProduct.id != null) {
+    if (_editedProduct.id != '') {
       await Provider.of<ProductsProvider>(context, listen: false)
           .updateProduct(_editedProduct.id as String, _editedProduct);
     } else {
@@ -100,7 +100,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await Provider.of<ProductsProvider>(context, listen: false)
             .addProduct(_editedProduct);
       } catch (error) {
-        return await showDialog<void>(
+        await showDialog<Null>(
             context: context,
             builder: (context) {
               return AlertDialog(

@@ -19,6 +19,9 @@ class OrderObject {
 
 class Orders with ChangeNotifier {
   List<OrderObject> _orders = [];
+  final String authenticationToken;
+
+  Orders(this.authenticationToken, this._orders);
 
   List<OrderObject> get orders {
     return [..._orders];
@@ -26,7 +29,7 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final url = Uri.parse(
-        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders.json');
+        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=$authenticationToken');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>?;
@@ -59,7 +62,7 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartObject> cartProducts, double total) async {
     final timeStamp = DateTime.now();
     final url = Uri.parse(
-        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders.json');
+        'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth$authenticationToken');
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -79,12 +82,12 @@ class Orders with ChangeNotifier {
           id: json.decode(response.body)['name'],
           amount: total,
           products: cartProducts,
-          dateTime: DateTime.now(),
+          dateTime: timeStamp,
         ),
       );
       notifyListeners();
     } catch (error) {
-      rethrow;
+      throw error;
     }
   }
 }

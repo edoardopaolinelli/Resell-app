@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/http_exception.dart';
 import '../providers/authentication.dart';
 
 enum AuthenticationMode { signup, login }
@@ -96,6 +97,22 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
   bool _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('An error occurred'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -104,13 +121,33 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authenticationMode == AuthenticationMode.login) {
-      // LogIn
-    } else {
-      await Provider.of<Authentication>(context, listen: false).signup(
-        _authenticationData['email']!,
-        _authenticationData['password']!,
-      );
+    try {
+      if (_authenticationMode == AuthenticationMode.login) {
+        await Provider.of<Authentication>(context, listen: false).login(
+          _authenticationData['email']!,
+          _authenticationData['password']!,
+        );
+      } else {
+        await Provider.of<Authentication>(context, listen: false).signup(
+          _authenticationData['email']!,
+          _authenticationData['password']!,
+        );
+      }
+    } on HttpException catch (error) {
+      var errorMessage = 'Failed Authentication';
+      if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'There\'s no user with that email.';
+      } else if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email.';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'This is not a valid password.';
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      var errorMessage = 'Could not authenticate. Please try again later.';
+      _showErrorDialog(errorMessage);
     }
     setState(() {
       _isLoading = false;
@@ -163,7 +200,7 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                     return null;
                   },
                   onSaved: (value) {
-                    _authenticationData['email'] = value as String;
+                    _authenticationData['email'] = value!;
                   },
                 ),
                 TextFormField(
@@ -181,7 +218,7 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                     return null;
                   },
                   onSaved: (value) {
-                    _authenticationData['password'] = value as String;
+                    _authenticationData['password'] = value!;
                   },
                 ),
                 if (_authenticationMode == AuthenticationMode.signup)
