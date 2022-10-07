@@ -40,8 +40,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<Authentication, Orders>(
           update: (context, authentication, previous) => Orders(
               authentication.token as String,
+              authentication.userId as String,
               previous == null ? [] : previous.orders),
-          create: (context) => Orders('', []),
+          create: (context) => Orders('', '', []),
         ),
       ],
       child: Consumer<Authentication>(
