@@ -42,8 +42,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments.toString();
-      if (productId != '') {
+      final productId = ModalRoute.of(context)!.settings.arguments as String?;
+      if (productId != null) {
         _editedProduct = Provider.of<ProductsProvider>(
           context,
           listen: false,
@@ -94,13 +94,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     if (_editedProduct.id != '') {
       await Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(_editedProduct.id as String, _editedProduct);
+          .updateProduct(_editedProduct.id, _editedProduct);
     } else {
       try {
         await Provider.of<ProductsProvider>(context, listen: false)
             .addProduct(_editedProduct);
       } catch (error) {
-        await showDialog<Null>(
+        await showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
