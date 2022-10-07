@@ -22,6 +22,13 @@ class Authentication with ChangeNotifier {
     return null;
   }
 
+  String? get userId {
+    if (isAuthenticated) {
+      return _userId;
+    }
+    return null;
+  }
+
   Future<void> signup(String email, String password) async {
     final url = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
@@ -41,7 +48,7 @@ class Authentication with ChangeNotifier {
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['idToken'];
-      _userId = responseData['loacalId'];
+      _userId = responseData['localId'];
       _expirationDate = DateTime.now().add(
         Duration(
           seconds: int.parse(responseData['expiresIn']),
@@ -72,7 +79,7 @@ class Authentication with ChangeNotifier {
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['idToken'];
-      _userId = responseData['loacalId'];
+      _userId = responseData['localId'];
       _expirationDate = DateTime.now().add(
         Duration(
           seconds: int.parse(responseData['expiresIn']),

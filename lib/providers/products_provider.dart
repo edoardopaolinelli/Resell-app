@@ -8,8 +8,9 @@ class ProductsProvider with ChangeNotifier {
   List<Product> _items = [];
 
   final String authenticationToken;
+  final String userId;
 
-  ProductsProvider(this.authenticationToken, this._items);
+  ProductsProvider(this.authenticationToken, this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -32,15 +33,23 @@ class ProductsProvider with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
+      final favoriteUrl = Uri.parse(
+          'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/$userId.json?auth=$authenticationToken');
+      final favoriteResponse = await http.get(favoriteUrl);
+      final favoriteData = json.decode(favoriteResponse.body);
       final List<Product> loadedProducts = [];
       extractedData.forEach((productId, productData) {
-        loadedProducts.add(Product(
+        loadedProducts.add(
+          Product(
             id: productId,
             title: productData['title'],
             description: productData['description'],
             price: productData['price'],
             imageUrl: productData['imageUrl'],
-            isFavorite: productData['isFavorite']));
+            isFavorite:
+                favoriteData == null ? false : favoriteData[productId] ?? false,
+          ),
+        );
       });
       _items = loadedProducts;
       notifyListeners();
@@ -60,7 +69,6 @@ class ProductsProvider with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite,
         }),
       );
       final newProduct = Product(
