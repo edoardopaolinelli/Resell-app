@@ -95,7 +95,7 @@ class AuthenticationCard extends StatefulWidget {
 class _AuthenticationCardState extends State<AuthenticationCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthenticationMode _authenticationMode = AuthenticationMode.login;
-  Map<String, String> _authenticationData = {
+  final Map<String, String> _authenticationData = {
     'email': '',
     'password': '',
   };
