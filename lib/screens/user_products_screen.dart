@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import './edit_product_screen.dart';
 import '../widgets/app_drawer.dart';
@@ -33,8 +34,10 @@ class UserProductsScreen extends StatelessWidget {
         future: _refreshProducts(context),
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
-            ? const Center(
-                child: CircularProgressIndicator(),
+            ? Center(
+                child: SpinKitFadingCircle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               )
             : RefreshIndicator(
                 onRefresh: () => _refreshProducts(context),

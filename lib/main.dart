@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resell_app/screens/products_overview_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import './screens/products_overview_screen.dart';
 import './providers/authentication.dart';
 import './screens/edit_product_screen.dart';
 import './screens/orders_screen.dart';
@@ -65,8 +66,24 @@ class MyApp extends StatelessWidget {
                   future: authenticationData.automaticLogin(),
                   builder: (context, snapshot) =>
                       snapshot.connectionState == ConnectionState.waiting
-                          ? const Scaffold(
-                              body: Center(child: Text('Loading...')),
+                          ? Scaffold(
+                              body: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      const Color.fromRGBO(0, 255, 0, 1)
+                                          .withOpacity(0.5),
+                                      const Color.fromRGBO(255, 215, 0, 1)
+                                          .withOpacity(0.7),
+                                    ],
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: SpinKitFadingCircle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             )
                           : const AuthenticationScreen(),
                 ),

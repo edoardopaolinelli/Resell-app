@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../widgets/app_drawer.dart';
 import '../providers/orders.dart';
@@ -38,8 +39,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
         future: _ordersFuture,
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: SpinKitFadingCircle(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             );
           } else {
             if (snapshot.error != null) {

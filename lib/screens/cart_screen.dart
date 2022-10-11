@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
@@ -114,7 +115,9 @@ class _OrderButtonState extends State<OrderButton> {
               widget.cart.clearCart();
             },
       child: _isLoading
-          ? const CircularProgressIndicator()
+          ? SpinKitFadingCircle(
+              color: Theme.of(context).colorScheme.primary,
+            )
           : const Text(
               'ORDER NOW',
               style: TextStyle(

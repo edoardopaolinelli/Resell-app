@@ -37,7 +37,8 @@ class ProductDetailScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                  border: Border.all(width: 5, color: Colors.grey.shade800)),
+                border: Border.all(width: 5, color: Colors.grey.shade800),
+              ),
               height: 300,
               width: double.infinity,
               child: Hero(

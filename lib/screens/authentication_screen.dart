@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
 import '../providers/authentication.dart';
@@ -47,7 +48,8 @@ class AuthenticationScreen extends StatelessWidget {
                           vertical: 10.0, horizontal: 75.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
-                        color: Colors.brown.shade400,
+                        color: const Color.fromRGBO(255, 215, 0, 1)
+                            .withOpacity(0.7),
                         boxShadow: const [
                           BoxShadow(
                             blurRadius: 8,
@@ -247,7 +249,9 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                   height: 20,
                 ),
                 if (_isLoading)
-                  const CircularProgressIndicator()
+                  SpinKitFadingCircle(
+                    color: Theme.of(context).colorScheme.primary,
+                  )
                 else
                   ElevatedButton(
                     onPressed: _submit,

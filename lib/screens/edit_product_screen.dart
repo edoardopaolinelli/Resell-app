@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../providers/products_provider.dart';
 import '../providers/product.dart';
@@ -138,8 +139,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Center(
+              child: SpinKitFadingCircle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             )
           : Padding(
               padding: const EdgeInsets.all(15.0),

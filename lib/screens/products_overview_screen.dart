@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../providers/products_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../screens/cart_screen.dart';
@@ -94,7 +95,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       ),
       drawer: const AppDrawer(),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SpinKitFadingCircle(
+              color: Theme.of(context).colorScheme.primary,
+            ))
           : ProductsGrid(showFavorites: _showFavoritesOnly),
     );
   }

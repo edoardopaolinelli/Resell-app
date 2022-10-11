@@ -13,7 +13,8 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           AppBar(
-            backgroundColor: Colors.lime,
+            backgroundColor:
+                const Color.fromRGBO(255, 215, 0, 1).withOpacity(0.7),
             title: const Text('Menù'),
             automaticallyImplyLeading: false,
           ),
