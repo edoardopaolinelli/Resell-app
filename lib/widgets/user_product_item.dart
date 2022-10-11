@@ -22,16 +22,8 @@ class UserProductItem extends StatelessWidget {
       elevation: 5,
       child: ListTile(
         title: Text(title),
-        leading: AspectRatio(
-          aspectRatio: 1 / 1,
-          child: ClipOval(
-            child: FadeInImage(
-              placeholder:
-                  const AssetImage('assets/images/product-placeholder.png'),
-              image: NetworkImage(imageUrl),
-              fit: BoxFit.cover,
-            ),
-          ),
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(imageUrl),
         ),
         trailing: SizedBox(
           width: 100,
