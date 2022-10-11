@@ -104,7 +104,7 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('An error occurred'),
+        title: const Text('An error occurred!'),
         content: Text(message),
         actions: [
           TextButton(
@@ -176,8 +176,12 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      elevation: 8.0,
-      child: Container(
+      elevation: 10.0,
+      child: AnimatedContainer(
+        duration: const Duration(
+          milliseconds: 300,
+        ),
+        curve: Curves.fastOutSlowIn,
         height: _authenticationMode == AuthenticationMode.signup ? 320 : 260,
         constraints: BoxConstraints(
             minHeight:
@@ -235,7 +239,7 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                             if (value != _passwordController.text) {
                               return 'Passwords do not match!';
                             }
-                            //return null;
+                            return null;
                           }
                         : null,
                   ),
