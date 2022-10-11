@@ -1,16 +1,49 @@
-# resell_app
+# Shop-app
+Shop-app is a simple app for the sale of items by users, who can place orders and upload products for sale.
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+##
+# Functionality
 
-A few resources to get you started if this is your first Flutter project:
+### Authentication
+The application allows the user to register classically with e-mail and password.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+##
+### Layout
+Once logged in, the user is redirected to the viewing screen of all products, where they can add the different products to the cart, choose their favorites, view the details of each product and filter the products between favorites and not. In the side Drawer the user can manage the various products he has loaded, and load others; view the list of your orders or log out.
+
+
+
+
+
+##
+### Cart
+All orders go through the shopping cart, where the user can cancel or confirm their orders one last time before they are placed.
+
+
+
+
+##
+### Database
+All data relating to the products loaded, the orders placed and the products included in the favorites, are saved on the database and loaded from it.
+
+
+
+##
+### Used technologies
+For the realization of the project I used Flutter and Firebase.
+
+
+
+##
+# Future implementations
+<ul>
+    <li>Login via google account;</li>
+</ul>
+
+
