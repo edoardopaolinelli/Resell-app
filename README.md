@@ -20,8 +20,8 @@ The application allows the user to register classically with e-mail and password
 Once logged in, the user is redirected to the viewing screen of all products, where they can add the different products to the cart, choose their favorites, view the details of each product and filter the products between favorites and not. In the side Drawer the user can manage the various products he has loaded, and load others; view the list of your orders or log out.
 
 <p float="left">
-<img src="/screenshots/ProductOvervieewScreen(Placeholder).jpg" width="300" height="600" />
-<img src="/screenshots/ProductOvervieewScreen.jpg" width="300" height="600" />
+<img src="/screenshots/ProductOverviewScreen(Placeholder).jpg" width="300" height="600" />
+<img src="/screenshots/ProductOverviewScreen.jpg" width="300" height="600" />
 </p>
 
 <p float="left">
