@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:resell_app/widgets/error_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/http_exception.dart';
 import '../auth/secrets.dart';
 
 class Authentication with ChangeNotifier {
@@ -32,52 +32,58 @@ class Authentication with ChangeNotifier {
     return null;
   }
 
-  Future<void> _authenticate(
-      String email, String password, String urlSegment) async {
+  Future<void> _authenticate(String email, String password, String urlSegment,
+      BuildContext context) async {
     final url = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/$urlSegment?key=$apiKey');
-    //try {
-    final response = await http.post(
-      url,
-      body: json.encode(
-        {
-          'email': email,
-          'password': password,
-          'returnSecureToken': true,
-        },
-      ),
-    );
-    final responseData = json.decode(response.body);
-    if (responseData['error'] != null) {
-      throw HttpException(responseData['error']['message']);
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            'email': email,
+            'password': password,
+            'returnSecureToken': true,
+          },
+        ),
+      );
+      final responseData = json.decode(response.body);
+      if (responseData['error'] != null) {
+        // ignore: use_build_context_synchronously
+        showErrorDialog(
+            'Failed Authentication', context, responseData['error']['message']);
+        return;
+      }
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expirationDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseData['expiresIn']),
+        ),
+      );
+      _autoLogout();
+      notifyListeners();
+      final preferences = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expirationDate': _expirationDate!.toIso8601String(),
+      });
+      preferences.setString('userData', userData);
+    } catch (error) {
+      throw Exception(error.toString());
     }
-    _token = responseData['idToken'];
-    _userId = responseData['localId'];
-    _expirationDate = DateTime.now().add(
-      Duration(
-        seconds: int.parse(responseData['expiresIn']),
-      ),
-    );
-    _autoLogout();
-    notifyListeners();
-    final preferences = await SharedPreferences.getInstance();
-    final userData = json.encode({
-      'token': _token,
-      'userId': _userId,
-      'expirationDate': _expirationDate!.toIso8601String(),
-    });
-    preferences.setString('userData', userData);
-    /* } catch (error) {
-      throw error;
-    } */
   }
 
-  Future<void> signup(String email, String password) async {
-    return _authenticate(email, password, 'accounts:signUp');
+  Future<void> signup(
+      String email, String password, BuildContext context) async {
+    return _authenticate(email, password, 'accounts:signUp', context);
   }
 
-  Future<void> login(String email, String password) async {
-    return _authenticate(email, password, 'accounts:signInWithPassword');
+  Future<void> login(
+      String email, String password, BuildContext context) async {
+    return _authenticate(
+        email, password, 'accounts:signInWithPassword', context);
   }
 
   Future<bool> automaticLogin() async {

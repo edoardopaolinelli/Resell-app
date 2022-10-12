@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/http_exception.dart';
 import './product.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -57,7 +56,7 @@ class ProductsProvider with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      throw error;
+      throw Exception(error.toString());
     }
   }
 
@@ -85,7 +84,7 @@ class ProductsProvider with ChangeNotifier {
       _items.add(newProduct);
       notifyListeners();
     } catch (error) {
-      throw error;
+      throw Exception(error.toString());
     }
   }
 
@@ -104,7 +103,7 @@ class ProductsProvider with ChangeNotifier {
       _items[productIndex] = newProduct;
       notifyListeners();
     } catch (error) {
-      throw error;
+      throw Exception(error.toString());
     }
   }
 
@@ -119,7 +118,7 @@ class ProductsProvider with ChangeNotifier {
     if (response.statusCode > 399 && response.statusCode < 500) {
       _items.insert(productIndex, existingProduct);
       notifyListeners();
-      throw HttpException('Could not delete the product.');
+      throw Exception('Could not delete the product.');
     }
     existingProduct = null;
   }
