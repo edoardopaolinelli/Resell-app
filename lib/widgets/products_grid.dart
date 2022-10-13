@@ -5,6 +5,7 @@ import '../widgets/product_item.dart';
 
 class ProductsGrid extends StatelessWidget {
   final bool showFavorites;
+
   const ProductsGrid({super.key, required this.showFavorites});
 
   @override
@@ -21,12 +22,11 @@ class ProductsGrid extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemBuilder: (context, index) {
-        return ChangeNotifierProvider.value(
-          value: products[index],
-          child: const ProductItem(),
-        );
-      },
+      itemBuilder: (context, index) => ChangeNotifierProvider.value(
+        value: products[index],
+        // ignore: prefer_const_constructors
+        child: ProductItem(),
+      ),
     );
   }
 }
