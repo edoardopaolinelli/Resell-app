@@ -2,10 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/products_provider.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-detail';
 
   const ProductDetailScreen({super.key});
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen>
+    with SingleTickerProviderStateMixin {
+  late TransformationController _controller;
+  TapDownDetails? _tapDownDetails;
+
+  late AnimationController _animationController;
+  Animation<Matrix4>? _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TransformationController();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    )..addListener(() {
+        _controller.value = _animation!.value;
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +72,40 @@ class ProductDetailScreen extends StatelessWidget {
               ),
               height: 300,
               width: double.infinity,
-              child: Hero(
-                tag: chosenProduct.id,
-                child: Image.network(
-                  chosenProduct.imageUrl,
-                  fit: BoxFit.cover,
+              child: GestureDetector(
+                onDoubleTapDown: (details) => _tapDownDetails = details,
+                onDoubleTap: () {
+                  final position = _tapDownDetails!.localPosition;
+                  const double scale = 2.5;
+                  final x = -position.dx * (scale - 1);
+                  final y = -position.dy * (scale - 1);
+                  final zoomed = Matrix4.identity()
+                    ..translate(x, y)
+                    ..scale(scale);
+                  final end = _controller.value.isIdentity()
+                      ? zoomed
+                      : Matrix4.identity();
+                  _animation = Matrix4Tween(
+                    begin: _controller.value,
+                    end: end,
+                  ).animate(
+                    CurveTween(curve: Curves.easeOut)
+                        .animate(_animationController),
+                  );
+
+                  _animationController.forward(from: 0);
+                },
+                child: InteractiveViewer(
+                  transformationController: _controller,
+                  panEnabled: false,
+                  scaleEnabled: false,
+                  child: Hero(
+                    tag: chosenProduct.id,
+                    child: Image.network(
+                      chosenProduct.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),

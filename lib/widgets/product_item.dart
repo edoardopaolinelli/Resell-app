@@ -23,53 +23,56 @@ class ProductItem extends StatelessWidget {
       listen: false,
     );
     return GridTile(
-      footer: GridTileBar(
-        leading: IconButton(
-          onPressed: () {
-            cart.addObject(product.id, product.price, product.title);
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text(
-                  'Added product to cart!',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.amber,
+      footer: SizedBox(
+        height: 40,
+        child: GridTileBar(
+          backgroundColor: Colors.black38,
+          leading: IconButton(
+            onPressed: () {
+              cart.addObject(product.id, product.price, product.title);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text(
+                    'Added product to cart!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.amber,
+                    ),
+                  ),
+                  action: SnackBarAction(
+                    label: 'CANCEL',
+                    onPressed: () {
+                      cart.removeSingleObject(product.id);
+                    },
+                  ),
+                  duration: const Duration(
+                    seconds: 3,
                   ),
                 ),
-                action: SnackBarAction(
-                  label: 'CANCEL',
-                  onPressed: () {
-                    cart.removeSingleObject(product.id);
-                  },
-                ),
-                duration: const Duration(
-                  seconds: 3,
-                ),
-              ),
-            );
-          },
-          icon: const Icon(Icons.shopping_bag),
-          color: Colors.amber,
-        ),
-        trailing: Consumer<Product>(
-          builder: (context, productValue, child) => IconButton(
-            onPressed: () async {
-              productValue.toggleFavoriteStatus(
-                authenticationData.token,
-                authenticationData.userId,
               );
             },
-            icon: Icon(product.isFavorite
-                ? Icons.favorite
-                : Icons.favorite_outline_sharp),
+            icon: const Icon(Icons.shopping_bag),
             color: Colors.amber,
           ),
-        ),
-        backgroundColor: Colors.black45,
-        title: Text(
-          product.title,
-          textAlign: TextAlign.center,
+          trailing: Consumer<Product>(
+            builder: (context, productValue, child) => IconButton(
+              onPressed: () async {
+                productValue.toggleFavoriteStatus(
+                  authenticationData.token,
+                  authenticationData.userId,
+                );
+              },
+              icon: Icon(product.isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_outline_sharp),
+              color: Colors.amber,
+            ),
+          ),
+          title: Text(
+            product.title,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
       child: Container(

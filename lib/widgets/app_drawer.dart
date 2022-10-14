@@ -10,43 +10,83 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        children: [
-          AppBar(
-            backgroundColor:
-                const Color.fromRGBO(255, 215, 0, 1).withOpacity(0.7),
-            title: const Text('Menù'),
-            automaticallyImplyLeading: false,
-          ),
-          ListTile(
-            leading: const Icon(Icons.shop),
-            title: const Text('Shop'),
-            onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.payment),
-            title: const Text('Orders'),
-            onTap: () => Navigator.of(context)
-                .pushReplacementNamed(OrdersScreen.routeName),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Manage Products'),
-            onTap: () => Navigator.of(context)
-                .pushReplacementNamed(UserProductsScreen.routeName),
-          ),
-          const Divider(),
-          ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushReplacementNamed('/');
-                Provider.of<Authentication>(context, listen: false).logout();
-              }),
-        ],
+      child: Material(
+        color: Theme.of(context).colorScheme.secondary,
+        child: Column(
+          children: [
+            AppBar(
+              backgroundColor:
+                  const Color.fromRGBO(255, 215, 0, 1).withOpacity(0.7),
+              title: const Text('Menù'),
+              automaticallyImplyLeading: false,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.shop,
+                color: Colors.white,
+              ),
+              title: const Text('Shop', style: TextStyle(color: Colors.white)),
+              onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+              hoverColor: Colors.white70,
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(
+                Icons.payment,
+                color: Colors.white,
+              ),
+              title:
+                  const Text('Orders', style: TextStyle(color: Colors.white)),
+              onTap: () => Navigator.of(context)
+                  .pushReplacementNamed(OrdersScreen.routeName),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+              title: const Text('Manage Products',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () => Navigator.of(context)
+                  .pushReplacementNamed(UserProductsScreen.routeName),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                title:
+                    const Text('Logout', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Are you sure to logout?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacementNamed('/');
+                            Provider.of<Authentication>(context, listen: false)
+                                .logout();
+                          },
+                          child: const Text('Continue'),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+          ],
+        ),
       ),
     );
   }
