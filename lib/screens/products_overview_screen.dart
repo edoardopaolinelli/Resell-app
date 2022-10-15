@@ -97,8 +97,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       body: _isLoading
           ? Center(
               child: SpinKitFadingCircle(
-              color: Theme.of(context).colorScheme.primary,
-            ))
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            )
           : ProductsGrid(showFavorites: _showFavoritesOnly),
     );
   }

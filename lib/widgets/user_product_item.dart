@@ -23,6 +23,7 @@ class UserProductItem extends StatelessWidget {
       child: ListTile(
         title: Text(title),
         leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           backgroundImage: NetworkImage(imageUrl),
         ),
         trailing: SizedBox(
