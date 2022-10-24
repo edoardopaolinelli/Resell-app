@@ -1,5 +1,5 @@
-# Shop-app
-Shop-app is a simple app for the sale of items by users, who can place orders and upload products for sale.
+# Resell-app
+Resell-app is a simple app for the sale of items by users, who can place orders and upload products for sale.
 
 
 
