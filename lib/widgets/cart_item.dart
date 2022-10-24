@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resell_app/screens/product_detail_screen.dart';
 import '../providers/cart.dart';
 
 class CartItem extends StatelessWidget {
@@ -77,22 +78,36 @@ class CartItem extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: ListTile(
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: CircleAvatar(
-                radius: 25,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                backgroundImage: NetworkImage(imageUrl),
-              ),
+          child: GestureDetector(
+            onDoubleTap: () => Navigator.of(context).pushNamed(
+              ProductDetailScreen.routeName,
+              arguments: productId,
             ),
-            title: Text(title),
-            subtitle: Text('Total: ${(price * quantity).toStringAsFixed(2)} €'),
-            trailing: Text('$quantity x'),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundImage: NetworkImage(imageUrl),
+                ),
+              ),
+              title: Text(title),
+              subtitle:
+                  Text('Total: ${(price * quantity).toStringAsFixed(2)} €'),
+              trailing: Text('$quantity x'),
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+
+/* child: GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+            ProductDetailScreen.routeName,
+            arguments: product.id,
+          ),*/
