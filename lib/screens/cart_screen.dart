@@ -72,6 +72,7 @@ class CartScreen extends StatelessWidget {
                   title: cart.objects.values.toList()[index].title,
                   price: cart.objects.values.toList()[index].price,
                   quantity: cart.objects.values.toList()[index].quantity,
+                  imageUrl: cart.objects.values.toList()[index].imageUrl,
                 ),
               ),
             ),

@@ -49,6 +49,7 @@ class Orders with ChangeNotifier {
                   title: cartObject['title'],
                   quantity: cartObject['quantity'],
                   price: cartObject['price'],
+                  imageUrl: cartObject['imageUrl'],
                 ),
               )
               .toList(),
@@ -77,6 +78,7 @@ class Orders with ChangeNotifier {
                       'title': cartProduct.title,
                       'quantity': cartProduct.quantity,
                       'price': cartProduct.price,
+                      'imageUrl': cartProduct.imageUrl,
                     })
                 .toList(),
           }));

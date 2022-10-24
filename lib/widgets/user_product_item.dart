@@ -7,6 +7,7 @@ class UserProductItem extends StatelessWidget {
   final String? id;
   final String title;
   final String imageUrl;
+
   const UserProductItem({
     super.key,
     required this.title,
@@ -23,8 +24,13 @@ class UserProductItem extends StatelessWidget {
       child: ListTile(
         title: Text(title),
         leading: CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          backgroundImage: NetworkImage(imageUrl),
+          radius: 22.5,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
         ),
         trailing: SizedBox(
           width: 100,

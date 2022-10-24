@@ -17,7 +17,8 @@ class Cart with ChangeNotifier {
     return total;
   }
 
-  void addObject(String productId, double price, String title) {
+  void addObject(
+      String productId, double price, String title, String imageUrl) {
     if (_objects.containsKey(productId)) {
       _objects.update(
         productId,
@@ -26,6 +27,7 @@ class Cart with ChangeNotifier {
           title: cartObject.title,
           quantity: cartObject.quantity + 1,
           price: cartObject.price,
+          imageUrl: cartObject.imageUrl,
         ),
       );
     } else {
@@ -36,6 +38,7 @@ class Cart with ChangeNotifier {
           title: title,
           quantity: 1,
           price: price,
+          imageUrl: imageUrl,
         ),
       );
     }
@@ -54,6 +57,7 @@ class Cart with ChangeNotifier {
           title: cartObject.title,
           quantity: cartObject.quantity - 1,
           price: cartObject.price,
+          imageUrl: cartObject.imageUrl,
         ),
       );
     } else {

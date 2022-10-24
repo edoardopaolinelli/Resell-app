@@ -109,7 +109,6 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
     setState(() {
       _isLoading = true;
     });
-    //try {
     if (_authenticationMode == AuthenticationMode.login) {
       await Provider.of<Authentication>(context, listen: false).login(
         _authenticationData['email']!,

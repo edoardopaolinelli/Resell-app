@@ -100,8 +100,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 Icons.shopping_bag,
               ),
               onPressed: () {
-                cart.addObject(
-                    chosenProduct.id, chosenProduct.price, chosenProduct.title);
+                cart.addObject(chosenProduct.id, chosenProduct.price,
+                    chosenProduct.title, chosenProduct.imageUrl);
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -178,12 +178,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
               height: 16,
             ),
             Container(
-              margin: const EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(
+                top: 10,
+                left: 10,
+                right: 10,
+              ),
               padding: const EdgeInsets.only(top: 20),
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(40),
                 ),
               ),
