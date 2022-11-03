@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/cart_object.dart';
@@ -28,7 +29,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  Future<void> fetchAndSetOrders() async {
+  Future<void> fetchAndSetOrders(BuildContext context) async {
     final url = Uri.parse(
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authenticationToken');
     try {
@@ -58,12 +59,28 @@ class Orders with ChangeNotifier {
       });
       _orders = loadedOrders.reversed.toList();
       notifyListeners();
-    } catch (error) {
-      throw Exception(error.toString());
+    } on HttpException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
   }
 
-  Future<void> addOrder(List<CartObject> cartProducts, double total) async {
+  Future<void> addOrder(
+      BuildContext context, List<CartObject> cartProducts, double total) async {
     final timeStamp = DateTime.now();
     final url = Uri.parse(
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authenticationToken');
@@ -91,8 +108,23 @@ class Orders with ChangeNotifier {
         ),
       );
       notifyListeners();
-    } catch (error) {
-      throw Exception(error.toString());
+    } on HttpException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:resell_app/widgets/error_dialog.dart';
@@ -70,8 +71,23 @@ class Authentication with ChangeNotifier {
         'expirationDate': _expirationDate!.toIso8601String(),
       });
       preferences.setString('userData', userData);
-    } catch (error) {
-      throw Exception(error.toString());
+    } on HttpException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
   }
 

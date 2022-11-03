@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './product.dart';
@@ -23,7 +24,8 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+  Future<void> fetchAndSetProducts(BuildContext context,
+      [bool filterByUser = false]) async {
     final filterString =
         filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
     final url = Uri.parse(
@@ -55,12 +57,27 @@ class ProductsProvider with ChangeNotifier {
       });
       _items = loadedProducts;
       notifyListeners();
-    } catch (error) {
-      throw Exception(error.toString());
+    } on HttpException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
   }
 
-  Future<void> addProduct(Product product) async {
+  Future<void> addProduct(BuildContext context, Product product) async {
     final url = Uri.parse(
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authenticationToken');
     try {
@@ -83,12 +100,28 @@ class ProductsProvider with ChangeNotifier {
       );
       _items.add(newProduct);
       notifyListeners();
-    } catch (error) {
-      throw Exception(error.toString());
+    } on HttpException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
   }
 
-  Future<void> updateProduct(String id, Product newProduct) async {
+  Future<void> updateProduct(
+      BuildContext context, String id, Product newProduct) async {
     final productIndex = _items.indexWhere((product) => product.id == id);
     final url = Uri.parse(
         'https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$authenticationToken');
@@ -102,12 +135,27 @@ class ProductsProvider with ChangeNotifier {
           }));
       _items[productIndex] = newProduct;
       notifyListeners();
-    } catch (error) {
-      throw Exception(error.toString());
+    } on HttpException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
   }
 
-  Future<void> deleteProduct(String id) async {
+  Future<void> deleteProduct(BuildContext context, String id) async {
     final productIndex = _items.indexWhere((product) => product.id == id);
     Product? existingProduct = _items[productIndex];
     final url = Uri.parse(
@@ -118,7 +166,22 @@ class ProductsProvider with ChangeNotifier {
     if (response.statusCode > 399 && response.statusCode < 500) {
       _items.insert(productIndex, existingProduct);
       notifyListeners();
-      throw Exception('Could not delete the product.');
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: const Text('Could not delete the product.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
     }
     existingProduct = null;
   }

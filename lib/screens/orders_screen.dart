@@ -16,7 +16,8 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   Future? _ordersFuture;
   Future _obtainOrdersFuture() {
-    return Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+    return Provider.of<Orders>(context, listen: false)
+        .fetchAndSetOrders(context);
   }
 
   @override
@@ -47,7 +48,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           } else {
             if (snapshot.error != null) {
               return const Center(
-                child: Text('An error occurred'),
+                child: Text('An error occurred!'),
               );
             } else {
               return Consumer<Orders>(

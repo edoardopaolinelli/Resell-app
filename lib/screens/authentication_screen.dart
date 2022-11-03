@@ -44,7 +44,9 @@ class AuthenticationScreen extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 20.0),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 75.0),
+                        vertical: 10.0,
+                        horizontal: 75.0,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
                         color: const Color.fromRGBO(255, 215, 0, 1)

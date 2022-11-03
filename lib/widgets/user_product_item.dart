@@ -64,7 +64,7 @@ class UserProductItem extends StatelessWidget {
                             try {
                               await Provider.of<ProductsProvider>(context,
                                       listen: false)
-                                  .deleteProduct(id as String);
+                                  .deleteProduct(context, id as String);
                             } catch (error) {
                               scaffoldMessenger.showSnackBar(
                                 const SnackBar(

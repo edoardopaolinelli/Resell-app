@@ -62,6 +62,7 @@ class ProductItem extends StatelessWidget {
               builder: (context, productValue, child) => IconButton(
                 onPressed: () async {
                   productValue.toggleFavoriteStatus(
+                    context,
                     authenticationData.token,
                     authenticationData.userId,
                   );
@@ -85,10 +86,9 @@ class ProductItem extends StatelessWidget {
           ),
           child: Hero(
             tag: product.id,
-            child: FadeInImage(
-              placeholder:
-                  const AssetImage('assets/images/product-placeholder.png'),
-              image: NetworkImage(product.imageUrl),
+            child: FadeInImage.assetNetwork(
+              placeholder: 'assets/images/product-placeholder.png',
+              image: product.imageUrl,
               fit: BoxFit.cover,
             ),
           ),
