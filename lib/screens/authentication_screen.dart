@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/authentication.dart';
 
@@ -40,36 +41,18 @@ class AuthenticationScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  const Icon(Icons.shopping_bag_outlined,
+                      color: Colors.black, size: 56),
                   Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 75.0,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: const Color.fromRGBO(255, 215, 0, 1)
-                            .withOpacity(0.7),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black54,
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                      ),
-                      child: Text(
-                        'ResellApp',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.titleMedium!.color,
-                          fontSize: 45,
-                          fontFamily: 'Anton',
-                          fontWeight: FontWeight.normal,
-                        ),
+                    child: Text(
+                      'ResellApp',
+                      style: GoogleFonts.bebasNeue(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50,
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
                     child: const AuthenticationCard(),

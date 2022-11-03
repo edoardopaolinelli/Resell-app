@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Authentication>(
         builder: (context, authenticationData, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'ResellApp',
           theme: ThemeData(
             iconTheme: const IconThemeData(

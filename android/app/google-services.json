@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "732185331856",
+    "firebase_url": "https://resell-app-861f2-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "resell-app-861f2",
+    "storage_bucket": "resell-app-861f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732185331856:android:259b0bf7e57671e76eb015",
+        "android_client_info": {
+          "package_name": "com.example.resell_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "732185331856-tkb94tghn097036ifqp6qabc2pti796r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsK6aPdJb5rbi53VQAUAsYH76F-Crn0vM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "732185331856-tkb94tghn097036ifqp6qabc2pti796r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
