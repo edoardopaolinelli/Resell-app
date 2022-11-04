@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:resell_app/screens/forgot_password_screen.dart';
 import '../providers/authentication.dart';
 
 enum AuthenticationMode {
@@ -95,13 +96,13 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
       _isLoading = true;
     });
     if (_authenticationMode == AuthenticationMode.login) {
-      await Provider.of<Authentication>(context, listen: false).login(
+      await Provider.of<Authentication>(context, listen: false).signIn(
         _authenticationData['email']!,
         _authenticationData['password']!,
         context,
       );
     } else {
-      await Provider.of<Authentication>(context, listen: false).signup(
+      await Provider.of<Authentication>(context, listen: false).signUp(
         _authenticationData['email']!,
         _authenticationData['password']!,
         context,
@@ -137,10 +138,10 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
           milliseconds: 300,
         ),
         curve: Curves.fastOutSlowIn,
-        height: _authenticationMode == AuthenticationMode.signup ? 320 : 260,
+        height: _authenticationMode == AuthenticationMode.signup ? 340 : 300,
         constraints: BoxConstraints(
             minHeight:
-                _authenticationMode == AuthenticationMode.signup ? 320 : 260),
+                _authenticationMode == AuthenticationMode.signup ? 340 : 280),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -191,7 +192,7 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                     obscureText: true,
                     validator: _authenticationMode == AuthenticationMode.signup
                         ? (value) {
-                            if (value != _passwordController.text) {
+                            if (value != _passwordController.text.trim()) {
                               return 'Passwords do not match!';
                             }
                             return null;
@@ -235,6 +236,34 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                   child: Text(
                       '${_authenticationMode == AuthenticationMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (_authenticationMode == AuthenticationMode.login)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const ForgotPasswordScreen();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),

@@ -1,29 +1,19 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:resell_app/widgets/error_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../auth/secrets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Authentication with ChangeNotifier {
   String? _token;
-  DateTime? _expirationDate;
   String? _userId;
-  Timer? _authenticationTimer;
 
   bool get isAuthenticated {
-    return token != null;
+    return _token != null;
   }
 
   String? get token {
-    if (_expirationDate != null &&
-        _expirationDate!.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
-    return null;
+    return _token;
   }
 
   String? get userId {
@@ -33,45 +23,17 @@ class Authentication with ChangeNotifier {
     return null;
   }
 
-  Future<void> _authenticate(String email, String password, String urlSegment,
-      BuildContext context) async {
-    final url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/$urlSegment?key=$apiKey');
+  Future<void> signIn(
+      String email, String password, BuildContext context) async {
     try {
-      final response = await http.post(
-        url,
-        body: json.encode(
-          {
-            'email': email,
-            'password': password,
-            'returnSecureToken': true,
-          },
-        ),
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
       );
-      final responseData = json.decode(response.body);
-      if (responseData['error'] != null) {
-        // ignore: use_build_context_synchronously
-        showErrorDialog(
-            'Failed Authentication', context, responseData['error']['message']);
-        return;
-      }
-      _token = responseData['idToken'];
-      _userId = responseData['localId'];
-      _expirationDate = DateTime.now().add(
-        Duration(
-          seconds: int.parse(responseData['expiresIn']),
-        ),
-      );
-      _autoLogout();
+      _token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      _userId = FirebaseAuth.instance.currentUser!.uid;
       notifyListeners();
-      final preferences = await SharedPreferences.getInstance();
-      final userData = json.encode({
-        'token': _token,
-        'userId': _userId,
-        'expirationDate': _expirationDate!.toIso8601String(),
-      });
-      preferences.setString('userData', userData);
-    } on HttpException catch (e) {
+    } on FirebaseAuthException catch (e) {
       showDialog(
           context: context,
           builder: (context) {
@@ -91,15 +53,34 @@ class Authentication with ChangeNotifier {
     }
   }
 
-  Future<void> signup(
+  Future<void> signUp(
       String email, String password, BuildContext context) async {
-    return _authenticate(email, password, 'accounts:signUp', context);
-  }
-
-  Future<void> login(
-      String email, String password, BuildContext context) async {
-    return _authenticate(
-        email, password, 'accounts:signInWithPassword', context);
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      _userId = FirebaseAuth.instance.currentUser!.uid;
+      notifyListeners();
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occurred!'),
+              content: Text(e.message.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
+    }
   }
 
   Future<bool> automaticLogin() async {
@@ -110,40 +91,18 @@ class Authentication with ChangeNotifier {
     final extractedUserData =
         json.decode(preferences.getString('userData') as String)
             as Map<String, dynamic>;
-    final expirationDate = DateTime.parse(extractedUserData['expirationDate']);
-    if (expirationDate.isBefore(DateTime.now())) {
-      return false;
-    }
     _token = extractedUserData['token'];
     _userId = extractedUserData['userId'];
-    _expirationDate = expirationDate;
     notifyListeners();
-    _autoLogout();
     return true;
   }
 
+  //da sostituire completamente
   Future<void> logout() async {
     _token = null;
     _userId = null;
-    _expirationDate = null;
-    if (_authenticationTimer != null) {
-      _authenticationTimer!.cancel();
-      _authenticationTimer = null;
-    }
     notifyListeners();
     final preferences = await SharedPreferences.getInstance();
     await preferences.clear();
-  }
-
-  void _autoLogout() {
-    if (_authenticationTimer != null) {
-      _authenticationTimer!.cancel();
-    }
-    final remainingTime = _expirationDate!.difference(DateTime.now()).inSeconds;
-    _authenticationTimer = Timer(
-        Duration(
-          seconds: remainingTime,
-        ),
-        logout);
   }
 }
