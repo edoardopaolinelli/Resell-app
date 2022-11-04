@@ -9,6 +9,7 @@ class Authentication with ChangeNotifier {
   String? _userId;
 
   bool get isAuthenticated {
+    print(token);
     return _token != null;
   }
 
