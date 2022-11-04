@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart.dart';
 import '../providers/products_provider.dart';
@@ -21,6 +22,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
   late AnimationController _animationController;
   Animation<Matrix4>? _animation;
+  int _counter = 1;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      if (_counter == 1) return;
+      _counter--;
+    });
+  }
 
   @override
   void initState() {
@@ -87,151 +102,254 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           ),
         ],
       ),
-      floatingActionButton: Wrap(
-        direction: Axis.horizontal,
+      body: Stack(
         children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: FloatingActionButton(
-              heroTag: 'shopButton',
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.secondary,
-              child: const Icon(
-                Icons.shopping_bag,
-              ),
-              onPressed: () {
-                cart.addObject(chosenProduct.id, chosenProduct.price,
-                    chosenProduct.title, chosenProduct.imageUrl);
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text(
-                      'Added product to cart!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.amber,
-                      ),
-                    ),
-                    action: SnackBarAction(
-                      label: 'CANCEL',
-                      onPressed: () {
-                        cart.removeSingleObject(chosenProduct.id);
-                      },
-                    ),
-                    duration: const Duration(
-                      seconds: 3,
-                    ),
-                  ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            child: GestureDetector(
+              onDoubleTapDown: (details) => _tapDownDetails = details,
+              onDoubleTap: () {
+                final position = _tapDownDetails!.localPosition;
+                const double scale = 2.5;
+                final x = -position.dx * (scale - 1);
+                final y = -position.dy * (scale - 1);
+                final zoomed = Matrix4.identity()
+                  ..translate(x, y)
+                  ..scale(scale);
+                final end = _controller.value.isIdentity()
+                    ? zoomed
+                    : Matrix4.identity();
+                _animation = Matrix4Tween(
+                  begin: _controller.value,
+                  end: end,
+                ).animate(
+                  CurveTween(curve: Curves.easeOut)
+                      .animate(_animationController),
                 );
+                _animationController.forward(from: 0);
               },
+              child: InteractiveViewer(
+                transformationController: _controller,
+                panEnabled: false,
+                scaleEnabled: false,
+                child: Hero(
+                  tag: chosenProduct.id,
+                  child: Image.network(
+                    chosenProduct.imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                border: Border.all(width: 5, color: Colors.grey.shade800),
-              ),
-              height: 300,
-              width: double.infinity,
-              child: GestureDetector(
-                onDoubleTapDown: (details) => _tapDownDetails = details,
-                onDoubleTap: () {
-                  final position = _tapDownDetails!.localPosition;
-                  const double scale = 2.5;
-                  final x = -position.dx * (scale - 1);
-                  final y = -position.dy * (scale - 1);
-                  final zoomed = Matrix4.identity()
-                    ..translate(x, y)
-                    ..scale(scale);
-                  final end = _controller.value.isIdentity()
-                      ? zoomed
-                      : Matrix4.identity();
-                  _animation = Matrix4Tween(
-                    begin: _controller.value,
-                    end: end,
-                  ).animate(
-                    CurveTween(curve: Curves.easeOut)
-                        .animate(_animationController),
-                  );
-                  _animationController.forward(from: 0);
-                },
-                child: InteractiveViewer(
-                  transformationController: _controller,
-                  panEnabled: false,
-                  scaleEnabled: false,
-                  child: Hero(
-                    tag: chosenProduct.id,
-                    child: Image.network(
-                      chosenProduct.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(0, -4),
+                    blurRadius: 8,
                   ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-              margin: const EdgeInsets.only(
-                top: 10,
-                left: 10,
-                right: 10,
-              ),
-              padding: const EdgeInsets.only(top: 20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(40),
-                ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      left: 30,
+                      right: 30,
                     ),
-                    child: Text(
-                      chosenProduct.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            chosenProduct.title,
+                            style: GoogleFonts.ptSans(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 60,
+                      top: 10,
+                      left: 30,
+                      right: 30,
                     ),
                     child: Text(
                       chosenProduct.description,
                       maxLines: 3,
+                      style: GoogleFonts.ptSans(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.only(
+                      top: 30,
+                      left: 30,
+                      right: 30,
+                    ),
                     child: Text(
                       'Price: '
                       '${chosenProduct.price} €',
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: GoogleFonts.ptSans(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: _decrementCounter,
+                          child: Container(
+                            height: 49,
+                            width: 49,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '-',
+                                style: GoogleFonts.ptSans(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 49,
+                          width: 100,
+                          child: Center(
+                            child: Text(
+                              '$_counter',
+                              style: GoogleFonts.ptSans(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: _incrementCounter,
+                          child: Container(
+                            height: 49,
+                            width: 49,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '+',
+                                style: GoogleFonts.ptSans(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 30,
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.07),
+                          offset: const Offset(0, -3),
+                          blurRadius: 12,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Total',
+                                style: GoogleFonts.ptSans(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Text(
+                                '${chosenProduct.price * _counter} €',
+                                style: GoogleFonts.ptSans(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Material(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(10),
+                          child: InkWell(
+                            onTap: () {
+                              cart.addMultipleObject(
+                                  chosenProduct.id,
+                                  chosenProduct.price,
+                                  chosenProduct.title,
+                                  chosenProduct.imageUrl,
+                                  _counter);
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                'Add to Cart',
+                                style: GoogleFonts.ptSans(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

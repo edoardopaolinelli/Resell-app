@@ -17,7 +17,7 @@ class Cart with ChangeNotifier {
     return total;
   }
 
-  void addObject(
+  void addOneObject(
       String productId, double price, String title, String imageUrl) {
     if (_objects.containsKey(productId)) {
       _objects.update(
@@ -37,6 +37,34 @@ class Cart with ChangeNotifier {
           id: DateTime.now().toString(),
           title: title,
           quantity: 1,
+          price: price,
+          imageUrl: imageUrl,
+        ),
+      );
+    }
+    notifyListeners();
+  }
+
+  void addMultipleObject(String productId, double price, String title,
+      String imageUrl, int quantity) {
+    if (_objects.containsKey(productId)) {
+      _objects.update(
+        productId,
+        (cartObject) => CartObject(
+          id: cartObject.id,
+          title: cartObject.title,
+          quantity: cartObject.quantity + quantity,
+          price: cartObject.price,
+          imageUrl: cartObject.imageUrl,
+        ),
+      );
+    } else {
+      _objects.putIfAbsent(
+        productId,
+        () => CartObject(
+          id: DateTime.now().toString(),
+          title: title,
+          quantity: quantity,
           price: price,
           imageUrl: imageUrl,
         ),

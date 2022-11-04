@@ -234,7 +234,10 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                      '${_authenticationMode == AuthenticationMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                      '${_authenticationMode == AuthenticationMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      )),
                 ),
                 const SizedBox(
                   height: 10,
