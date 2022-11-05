@@ -27,9 +27,6 @@ Once logged in, the user is redirected to the viewing screen of all products, wh
 
 <p float="left">
 <kbd>
-<img src="/screenshots/ProductPlaceholderScreen.jpg" width="300" height="600" />
-</kbd>
-<kbd>
 <img src="/screenshots/ProductScreen.jpg" width="300" height="600" />
 </kbd>
 <kbd>
