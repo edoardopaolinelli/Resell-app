@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
@@ -43,14 +44,30 @@ class Product with ChangeNotifier {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('An error occurred!'),
-              content: Text(e.message.toString()),
+              title: Text(
+                'An error occurred!',
+                style: GoogleFonts.ptSans(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: Text(
+                e.message.toString(),
+                style: GoogleFonts.ptSans(
+                  fontSize: 16,
+                ),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Okay'),
+                  child: Text(
+                    'Okay',
+                    style: GoogleFonts.ptSans(
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
               ],
             );

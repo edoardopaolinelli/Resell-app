@@ -79,8 +79,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         ),
         title: Text(
           chosenProduct.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.ptSans(
+            fontSize: 20,
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,

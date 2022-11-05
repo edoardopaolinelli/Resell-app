@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -25,14 +26,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content:
-                const Text('Password reset link send! Check your email box.'),
+            content: Text(
+              'Password reset link send! Check your email box.',
+              style: GoogleFonts.ptSans(
+                fontSize: 20,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Okay'),
+                child: Text(
+                  'Okay',
+                  style: GoogleFonts.ptSans(
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ],
           );
@@ -43,8 +54,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('An error occurred!'),
-              content: Text(e.message.toString()),
+              title: Text(
+                'An error occurred!',
+                style: GoogleFonts.ptSans(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: Text(
+                e.message.toString(),
+                style: GoogleFonts.ptSans(
+                  fontSize: 16,
+                ),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -63,16 +85,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('Reset Password'),
+        title: Text(
+          'Reset Password',
+          style: GoogleFonts.ptSans(
+            fontSize: 20,
+          ),
+        ),
       ),
       body: Center(
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Text(
                   'Enter your email and we\'ll send you a reset link to your email.',
+                  style: GoogleFonts.ptSans(
+                    fontSize: 18,
+                  ),
                   textAlign: TextAlign.center),
             ),
             const SizedBox(height: 10),
@@ -100,9 +130,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordScreen> {
             MaterialButton(
               onPressed: resetPassword,
               color: Theme.of(context).colorScheme.primary,
-              child: const Text(
+              child: Text(
                 'Reset Password',
-                style: TextStyle(
+                style: GoogleFonts.ptSans(
+                  fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),

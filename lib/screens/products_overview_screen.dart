@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../providers/products_provider.dart';
@@ -47,8 +48,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'ProductsScreen',
+          style: GoogleFonts.ptSans(
+            fontSize: 20,
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [

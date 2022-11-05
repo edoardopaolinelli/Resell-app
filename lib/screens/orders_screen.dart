@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../widgets/app_drawer.dart';
 import '../providers/orders.dart';
@@ -31,8 +32,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text(
+        title: Text(
           'Your Orders',
+          style: GoogleFonts.ptSans(
+            fontSize: 20,
+          ),
         ),
       ),
       drawer: const AppDrawer(),

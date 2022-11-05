@@ -138,10 +138,11 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
           milliseconds: 300,
         ),
         curve: Curves.fastOutSlowIn,
-        height: _authenticationMode == AuthenticationMode.signup ? 340 : 300,
+        height: _authenticationMode == AuthenticationMode.signup ? 330 : 300,
         constraints: BoxConstraints(
-            minHeight:
-                _authenticationMode == AuthenticationMode.signup ? 340 : 280),
+          minHeight:
+              _authenticationMode == AuthenticationMode.signup ? 330 : 280,
+        ),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -219,9 +220,14 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30.0, vertical: 8.0),
                     ),
-                    child: Text(_authenticationMode == AuthenticationMode.login
-                        ? 'LOGIN'
-                        : 'SIGN UP'),
+                    child: Text(
+                      _authenticationMode == AuthenticationMode.login
+                          ? 'LOGIN'
+                          : 'SIGN UP',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 TextButton(
                   onPressed: _switchAuthenticationMode,
@@ -234,10 +240,11 @@ class _AuthenticationCardState extends State<AuthenticationCard> {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                      '${_authenticationMode == AuthenticationMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      )),
+                    '${_authenticationMode == AuthenticationMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,

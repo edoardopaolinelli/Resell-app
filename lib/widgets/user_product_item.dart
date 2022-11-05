@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/products_provider.dart';
 import '../screens/edit_product_screen.dart';
@@ -49,15 +50,31 @@ class UserProductItem extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Delete the product?'),
-                      content: const Text(
-                          'Are you sure to delete definitely the product ?'),
+                      title: Text(
+                        'Delete the product?',
+                        style: GoogleFonts.ptSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: Text(
+                        'Are you sure to delete definitely the product ?',
+                        style: GoogleFonts.ptSans(
+                          fontSize: 16,
+                        ),
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () {
                             navigator.pop(false);
                           },
-                          child: const Text('Cancel'),
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.ptSans(
+                              fontSize: 18,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -67,9 +84,12 @@ class UserProductItem extends StatelessWidget {
                                   .deleteProduct(context, id as String);
                             } catch (error) {
                               scaffoldMessenger.showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
                                     'Deleting failed!',
+                                    style: GoogleFonts.ptSans(
+                                      fontSize: 18,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -77,7 +97,13 @@ class UserProductItem extends StatelessWidget {
                             }
                             navigator.pop(true);
                           },
-                          child: const Text('Continue'),
+                          child: Text(
+                            'Continue',
+                            style: GoogleFonts.ptSans(
+                              fontSize: 18,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
                         ),
                       ],
                     ),

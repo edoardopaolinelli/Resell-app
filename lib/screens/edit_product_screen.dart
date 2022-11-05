@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/products_provider.dart';
 import '../providers/product.dart';
@@ -105,14 +106,30 @@ class _EditProductScreenState extends State<EditProductScreen> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text('An error occurred!'),
-                content: const Text('Something went wrong!'),
+                title: Text(
+                  'An error occurred!',
+                  style: GoogleFonts.ptSans(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                content: Text(
+                  'Something went wrong!',
+                  style: GoogleFonts.ptSans(
+                    fontSize: 16,
+                  ),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Okay'),
+                    child: Text(
+                      'Okay',
+                      style: GoogleFonts.ptSans(
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -130,7 +147,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Product'),
+        title: Text(
+          'Edit Product',
+          style: GoogleFonts.ptSans(
+            fontSize: 20,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: _saveForm,

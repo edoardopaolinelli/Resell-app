@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:resell_app/screens/product_detail_screen.dart';
 import '../providers/cart.dart';
@@ -30,9 +31,19 @@ class CartItem extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Delete the product?'),
-            content:
-                const Text('Are you sure to delete the product from the cart?'),
+            title: Text(
+              'Delete the product?',
+              style: GoogleFonts.ptSans(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              'Are you sure to delete the product from the cart?',
+              style: GoogleFonts.ptSans(
+                fontSize: 16,
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () {

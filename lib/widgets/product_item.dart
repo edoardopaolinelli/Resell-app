@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/authentication.dart';
 import '../providers/cart.dart';
@@ -36,9 +37,9 @@ class ProductItem extends StatelessWidget {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text(
+                    content: Text(
                       'Added product to cart!',
-                      style: TextStyle(
+                      style: GoogleFonts.ptSans(
                         fontSize: 16,
                         color: Colors.amber,
                       ),
@@ -75,6 +76,10 @@ class ProductItem extends StatelessWidget {
             ),
             title: Text(
               product.title,
+              style: GoogleFonts.ptSans(
+                fontSize: 13,
+                color: Colors.white,
+              ),
               textAlign: TextAlign.center,
             ),
           ),

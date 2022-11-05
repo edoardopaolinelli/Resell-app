@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/authentication.dart';
 import '../screens/user_products_screen.dart';
@@ -17,7 +18,12 @@ class AppDrawer extends StatelessWidget {
             AppBar(
               backgroundColor:
                   const Color.fromRGBO(255, 215, 0, 1).withOpacity(0.7),
-              title: const Text('Menù'),
+              title: Text(
+                'Menù',
+                style: GoogleFonts.ptSans(
+                  fontSize: 20,
+                ),
+              ),
               automaticallyImplyLeading: false,
             ),
             const SizedBox(
@@ -28,7 +34,13 @@ class AppDrawer extends StatelessWidget {
                 Icons.shop,
                 color: Colors.white,
               ),
-              title: const Text('Shop', style: TextStyle(color: Colors.white)),
+              title: Text(
+                'Shop',
+                style: GoogleFonts.ptSans(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
               onTap: () => Navigator.of(context).pushReplacementNamed('/'),
               hoverColor: Colors.white70,
             ),
@@ -38,8 +50,13 @@ class AppDrawer extends StatelessWidget {
                 Icons.payment,
                 color: Colors.white,
               ),
-              title:
-                  const Text('Orders', style: TextStyle(color: Colors.white)),
+              title: Text(
+                'Orders',
+                style: GoogleFonts.ptSans(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(OrdersScreen.routeName),
             ),
@@ -49,8 +66,13 @@ class AppDrawer extends StatelessWidget {
                 Icons.edit,
                 color: Colors.white,
               ),
-              title: const Text('Manage Products',
-                  style: TextStyle(color: Colors.white)),
+              title: Text(
+                'Manage Products',
+                style: GoogleFonts.ptSans(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
               onTap: () => Navigator.of(context)
                   .pushReplacementNamed(UserProductsScreen.routeName),
             ),
@@ -60,26 +82,47 @@ class AppDrawer extends StatelessWidget {
                   Icons.logout,
                   color: Colors.white,
                 ),
-                title:
-                    const Text('Logout', style: TextStyle(color: Colors.white)),
+                title: Text(
+                  'Logout',
+                  style: GoogleFonts.ptSans(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Are you sure to logout?'),
+                      title: Text(
+                        'Are you sure to logout?',
+                        style: GoogleFonts.ptSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'),
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.ptSans(
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                             Navigator.of(context).pushReplacementNamed('/');
                             Provider.of<Authentication>(context, listen: false)
-                                .logout();
+                                .logOut();
                           },
-                          child: const Text('Continue'),
+                          child: Text(
+                            'Continue',
+                            style: GoogleFonts.ptSans(
+                              fontSize: 16,
+                            ),
+                          ),
                         )
                       ],
                     ),

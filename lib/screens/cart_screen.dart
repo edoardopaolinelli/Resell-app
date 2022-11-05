@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
@@ -22,46 +23,17 @@ class CartScreen extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Your Cart',
+          style: GoogleFonts.ptSans(
+            fontSize: 20,
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Consumer<Cart>(
         builder: (context, cart, child) => Column(
           children: [
-            Card(
-              elevation: 10,
-              margin: const EdgeInsets.all(15),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Total',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                    const Spacer(),
-                    Chip(
-                      label: Text(
-                        '${cart.totalAmount.toStringAsFixed(2)} €',
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .primaryTextTheme
-                              .titleMedium!
-                              .color,
-                        ),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                    ),
-                    OrderButton(cart: cart),
-                  ],
-                ),
-              ),
-            ),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
@@ -74,6 +46,54 @@ class CartScreen extends StatelessWidget {
                   quantity: cart.objects.values.toList()[index].quantity,
                   imageUrl: cart.objects.values.toList()[index].imageUrl,
                 ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 30,
+              ),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(0, -3),
+                    blurRadius: 12,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Total',
+                          style: GoogleFonts.ptSans(
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          '${cart.totalAmount.toStringAsFixed(2)} €',
+                          style: GoogleFonts.ptSans(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  OrderButton(cart: cart),
+                ],
               ),
             ),
           ],
@@ -99,33 +119,38 @@ class _OrderButtonState extends State<OrderButton> {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
-          ? null
-          : () async {
-              setState(() {
-                _isLoading = true;
-              });
-              await Provider.of<Orders>(context, listen: false).addOrder(
-                context,
-                widget.cart.objects.values.toList(),
-                widget.cart.totalAmount,
-              );
-              setState(() {
-                _isLoading = false;
-              });
-              widget.cart.clearCart();
-            },
-      child: _isLoading
-          ? SpinKitFadingCircle(
-              color: Theme.of(context).colorScheme.primary,
-            )
-          : const Text(
-              'ORDER NOW',
-              style: TextStyle(
-                fontSize: 14,
+    return Material(
+      color: Colors.yellowAccent,
+      borderRadius: BorderRadius.circular(10),
+      child: TextButton(
+        onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
+            ? null
+            : () async {
+                setState(() {
+                  _isLoading = true;
+                });
+                await Provider.of<Orders>(context, listen: false).addOrder(
+                  context,
+                  widget.cart.objects.values.toList(),
+                  widget.cart.totalAmount,
+                );
+                setState(() {
+                  _isLoading = false;
+                });
+                widget.cart.clearCart();
+              },
+        child: _isLoading
+            ? SpinKitFadingCircle(
+                color: Theme.of(context).colorScheme.primary,
+              )
+            : const Text(
+                'ORDER NOW',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+      ),
     );
   }
 }
