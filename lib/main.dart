@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
       child: Consumer<Authentication>(
         builder: (context, authenticationData, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'ResellApp',
           theme: ThemeData(
             iconTheme: const IconThemeData(
               color: Colors.white,
@@ -62,7 +61,6 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.green,
             ).copyWith(secondary: Colors.orange),
             brightness: Brightness.light,
-            fontFamily: 'Lato',
           ),
           home: authenticationData.isAuthenticated
               ? const ProductsOverviewScreen()
