@@ -115,10 +115,3 @@ class CartItem extends StatelessWidget {
     );
   }
 }
-
-
-/* child: GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(
-            ProductDetailScreen.routeName,
-            arguments: product.id,
-          ),*/

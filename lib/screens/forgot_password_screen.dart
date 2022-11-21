@@ -117,7 +117,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.blue),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   hintText: 'Email',

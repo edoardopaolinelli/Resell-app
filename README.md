@@ -72,6 +72,8 @@ For the realization of the project I used Flutter and Firebase.
 <ul>
     <li>Login via google account</li>
     <li>Insertion of a payment system</li>
+    <li>Adding push notifications</li>
+    <li>Inserting photos from the camera</li>
 </ul>
 
 
